@@ -1,4 +1,4 @@
-module github.com/vulogov/2stack
+module github.com/vulogov/twostack
 
 go 1.16
 
