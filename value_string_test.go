@@ -25,3 +25,15 @@ func TestStringMake(t *testing.T) {
 		t.Error("ts.SetString()/ts.GetString() had failed")
 	}
 }
+
+func TestStringMakeWithEmptyName(t *testing.T) {
+	ts := Init()
+	ts.MakeString("Привет", "")
+	res, err := ts.GetString()
+	if err != nil {
+		t.Errorf("Error: %v", err)
+	}
+	if res != "Привет" {
+		t.Error("ts.SetString()/ts.GetString() had failed")
+	}
+}
