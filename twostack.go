@@ -4,12 +4,15 @@ import (
 	"fmt"
 
 	"github.com/gammazero/deque"
+	"github.com/google/uuid"
 	"github.com/lrita/cmap"
 )
 
 type TwoStack struct {
 	R      deque.Deque
 	C      cmap.Cmap
+	tmp    cmap.Cmap
+	ID     string
 	Status bool
 	Mode   bool
 }
@@ -23,6 +26,7 @@ func Init() *TwoStack {
 	ts := &TwoStack{
 		Status: true,
 		Mode:   true,
+		ID:     uuid.New().String(),
 	}
 	ts.R.PushBack(deque.New(0, minCap))
 	if ts.R.Len() != 1 {
@@ -97,6 +101,14 @@ func (ts *TwoStack) Add() {
 		ts.R.PushBack(deque.New(0, minCap))
 	} else {
 		ts.R.PushFront(deque.New(0, minCap))
+	}
+}
+
+func (ts *TwoStack) addQ(q *deque.Deque) {
+	if ts.Mode == true {
+		ts.R.PushBack(q)
+	} else {
+		ts.R.PushFront(q)
 	}
 }
 

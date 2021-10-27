@@ -2,6 +2,8 @@ package twostack
 
 import (
 	"fmt"
+
+	"github.com/gammazero/deque"
 )
 
 func (ts *TwoStack) CZip() error {
@@ -29,4 +31,37 @@ func czippost(ts *TwoStack) bool {
 	ts.Left()
 	ts.Del()
 	return true
+}
+
+func (ts *TwoStack) GZip() error {
+	if !TSGlobalTaker(ts, gzippre, gzip, gzippost) {
+		return fmt.Errorf(".Gzip() operation had failed")
+	}
+	return nil
+}
+
+func gzip(ts *TwoStack, f *Elem) {
+	q := ts.getTmp("_gzipq").(*deque.Deque)
+	if q != nil {
+		if ts.Mode == true {
+			q.PushBack(f)
+		} else {
+			q.PushFront(f)
+		}
+	}
+}
+
+func gzippre(ts *TwoStack) bool {
+	ts.setTmp("_gzipq", deque.New(0, minCap))
+	return true
+}
+
+func gzippost(ts *TwoStack) bool {
+	q := ts.getTmp("_gzipq").(*deque.Deque)
+	if q != nil {
+		ts.addQ(q)
+		ts.delTmp("_gzipq")
+		return true
+	}
+	return false
 }

@@ -2,6 +2,7 @@ package twostack
 
 import (
 	"fmt"
+	"math"
 
 	"github.com/cstockton/go-conv"
 )
@@ -58,6 +59,25 @@ func (ts *TwoStack) GetFloat() (float64, error) {
 		return float64(0), fmt.Errorf("There is no float value on top of the stack: %v", e.Type)
 	}
 	return e.V.(float64), nil
+}
+
+func (ts *TwoStack) Float() float64 {
+	e, err := ts.GetElem()
+	if err != nil {
+		return math.NaN()
+	}
+	switch e.Type {
+	case Float_t:
+		return e.V.(float64)
+	case Int_t:
+		return float64(e.V.(int64))
+	case String_t:
+		v := FloatFromString(e.V.(string))
+		if v != nil {
+			return v.(float64)
+		}
+	}
+	return math.NaN()
 }
 
 func (ts *TwoStack) TakeFloat() (float64, error) {

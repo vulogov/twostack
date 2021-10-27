@@ -155,3 +155,10 @@ func TestToString(t *testing.T) {
 		t.Errorf("#2 ts.String() had failed")
 	}
 }
+
+func TestUUID(t *testing.T) {
+	ts := Init()
+	if len(ts.ID) == 0 {
+		t.Errorf(".ID generation is failed")
+	}
+}
