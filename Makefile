@@ -1,4 +1,4 @@
-all: pre test
+all: check
 pre:
 	go get github.com/lrita/cmap
 	go get github.com/gammazero/deque

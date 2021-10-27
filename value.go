@@ -69,6 +69,10 @@ func (ts *TwoStack) SetElem(e *Elem) {
 	ts.Set(e)
 }
 
+func (e *Elem) String() string {
+	return e.ToString(e)
+}
+
 func (ts *TwoStack) G() (interface{}, error) {
 	_v, err := ts.Get()
 	if err != nil {

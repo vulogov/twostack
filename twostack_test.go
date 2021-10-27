@@ -1,6 +1,9 @@
 package twostack
 
-import "testing"
+import (
+	"fmt"
+	"testing"
+)
 
 func TestInit(t *testing.T) {
 	ts := Init()
@@ -78,6 +81,15 @@ func TestLen(t *testing.T) {
 	}
 }
 
+func TestQ(t *testing.T) {
+	ts := Init()
+	ts.Set("42")
+	q := ts.Q()
+	if q.Len() != 1 {
+		t.Error("ts.Q() had failed")
+	}
+}
+
 func TestDel(t *testing.T) {
 	ts := Init()
 	ts.Del()
@@ -127,5 +139,19 @@ func TestPut4(t *testing.T) {
 	r, _ := ts.G()
 	if r != 3.14 {
 		t.Errorf("#2 ts.Put(float) had failed: %v", r)
+	}
+}
+
+func TestToString(t *testing.T) {
+	ts := Init()
+	ts.Put(1, "")
+	ts.Put(2, "")
+	ts.Add()
+	ts.Put(3, "")
+	ts.Put(4, "")
+	r := ts.String()
+	fmt.Println(r)
+	if len(r) == 0 {
+		t.Errorf("#2 ts.String() had failed")
 	}
 }

@@ -124,3 +124,14 @@ func (ts *TwoStack) Len() int {
 	}
 	return 0
 }
+
+func (ts *TwoStack) Q() *deque.Deque {
+	if ts.R.Len() > 0 {
+		if ts.Mode == true {
+			return ts.R.Back().(*deque.Deque)
+		} else {
+			return ts.R.Front().(*deque.Deque)
+		}
+	}
+	return nil
+}
