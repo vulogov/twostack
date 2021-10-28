@@ -2,6 +2,8 @@ package twostack
 
 import (
 	"fmt"
+
+	"github.com/google/uuid"
 )
 
 func String(name string, v string, labels ...string) *Elem {
@@ -28,12 +30,24 @@ func StringToString(e *Elem) string {
 	}
 }
 
-func (ts *TwoStack) SetString(v string, name string, labels ...string) {
+func (ts *TwoStack) SetString(v string, labels ...string) {
+	var name string
+	if len(labels) > 0 {
+		name = labels[0]
+	} else {
+		name = uuid.New().String()
+	}
 	e := String(name, v, labels...)
 	ts.Set(e)
 }
 
-func (ts *TwoStack) MakeString(p string, name string, labels ...string) {
+func (ts *TwoStack) MakeString(p string, labels ...string) {
+	var name string
+	if len(labels) > 0 {
+		name = labels[0]
+	} else {
+		name = uuid.New().String()
+	}
 	e := MakeString(name, p, labels...)
 	ts.Set(e)
 }

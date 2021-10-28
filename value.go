@@ -2,6 +2,7 @@ package twostack
 
 import (
 	mapset "github.com/deckarep/golang-set"
+	"github.com/google/uuid"
 )
 
 const (
@@ -10,6 +11,7 @@ const (
 	Float_t    = 2
 	String_t   = 3
 	Duration_t = 4
+	Call_t     = 5
 	None_t     = 99
 )
 
@@ -92,6 +94,8 @@ func (ts *TwoStack) G() (interface{}, error) {
 			return v.V.(string), nil
 		case Float_t:
 			return v.V.(float64), nil
+		case Call_t:
+			return v.V.(string), nil
 		case None_t:
 			return nil, nil
 		}
@@ -116,6 +120,8 @@ func (ts *TwoStack) T() (interface{}, error) {
 			return v.V.(int64), nil
 		case String_t:
 			return v.V.(string), nil
+		case Call_t:
+			return v.V.(string), nil
 		case Float_t:
 			return v.V.(float64), nil
 		case None_t:
@@ -125,8 +131,14 @@ func (ts *TwoStack) T() (interface{}, error) {
 	return nil, nil
 }
 
-func (ts *TwoStack) Put(d interface{}, name string, labels ...string) bool {
+func (ts *TwoStack) Put(d interface{}, labels ...string) bool {
+	var name string
 	var e *Elem
+	if len(labels) > 0 {
+		name = labels[0]
+	} else {
+		name = uuid.New().String()
+	}
 	switch d.(type) {
 	case int:
 		e = Int(name, d.(int), labels...)

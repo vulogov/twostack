@@ -5,6 +5,7 @@ import (
 	"math"
 
 	"github.com/cstockton/go-conv"
+	"github.com/google/uuid"
 )
 
 func Float(name string, v float64, labels ...string) *Elem {
@@ -38,12 +39,24 @@ func FloatToString(e *Elem) string {
 	}
 }
 
-func (ts *TwoStack) SetFloat(v float64, name string, labels ...string) {
+func (ts *TwoStack) SetFloat(v float64, labels ...string) {
+	var name string
+	if len(labels) > 0 {
+		name = labels[0]
+	} else {
+		name = uuid.New().String()
+	}
 	e := Float(name, v, labels...)
 	ts.Set(e)
 }
 
-func (ts *TwoStack) MakeFloat(p string, name string, labels ...string) {
+func (ts *TwoStack) MakeFloat(p string, labels ...string) {
+	var name string
+	if len(labels) > 0 {
+		name = labels[0]
+	} else {
+		name = uuid.New().String()
+	}
 	e := MakeFloat(name, p, labels...)
 	if e != nil {
 		ts.Set(e)

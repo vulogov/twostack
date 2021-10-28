@@ -28,7 +28,7 @@ func TestStringMake(t *testing.T) {
 
 func TestStringMakeWithEmptyName(t *testing.T) {
 	ts := Init()
-	ts.MakeString("Привет", "")
+	ts.MakeString("Привет")
 	res, err := ts.GetString()
 	if err != nil {
 		t.Errorf("Error: %v", err)

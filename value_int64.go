@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/cstockton/go-conv"
+	"github.com/google/uuid"
 )
 
 func Int(name string, v int, labels ...string) *Elem {
@@ -41,16 +42,28 @@ func IntToString(e *Elem) string {
 	}
 }
 
-func (ts *TwoStack) SetInt(v int, name string, labels ...string) {
-	ts.SetInt64(int64(v), name, labels...)
+func (ts *TwoStack) SetInt(v int, labels ...string) {
+	ts.SetInt64(int64(v), labels...)
 }
 
-func (ts *TwoStack) SetInt64(v int64, name string, labels ...string) {
+func (ts *TwoStack) SetInt64(v int64, labels ...string) {
+	var name string
+	if len(labels) > 0 {
+		name = labels[0]
+	} else {
+		name = uuid.New().String()
+	}
 	e := Int64(name, v, labels...)
 	ts.Set(e)
 }
 
-func (ts *TwoStack) MakeInt(p string, name string, labels ...string) {
+func (ts *TwoStack) MakeInt(p string, labels ...string) {
+	var name string
+	if len(labels) > 0 {
+		name = labels[0]
+	} else {
+		name = uuid.New().String()
+	}
 	e := MakeInt(name, p, labels...)
 	if e != nil {
 		ts.Set(e)

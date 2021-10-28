@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/cstockton/go-conv"
+	"github.com/google/uuid"
 )
 
 func Bool(name string, v bool, labels ...string) *Elem {
@@ -37,12 +38,24 @@ func BoolToString(e *Elem) string {
 	}
 }
 
-func (ts *TwoStack) SetBool(v bool, name string, labels ...string) {
+func (ts *TwoStack) SetBool(v bool, labels ...string) {
+	var name string
+	if len(labels) > 0 {
+		name = labels[0]
+	} else {
+		name = uuid.New().String()
+	}
 	e := Bool(name, v, labels...)
 	ts.Set(e)
 }
 
-func (ts *TwoStack) MakeBool(p string, name string, labels ...string) {
+func (ts *TwoStack) MakeBool(p string, labels ...string) {
+	var name string
+	if len(labels) > 0 {
+		name = labels[0]
+	} else {
+		name = uuid.New().String()
+	}
 	e := MakeBool(name, p, labels...)
 	if e != nil {
 		ts.Set(e)
