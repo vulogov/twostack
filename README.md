@@ -101,7 +101,7 @@ func main() {
 	r, err := ts.G() // Expecting to have 3.14   
 }
 ```
-You may node a few things here:
+You may note a few things here:
 
 - .Put is different from .Set as it will store the data alongside with necessary information for conversion
 - "data type layer" do have a name for each value. If you do not care about name, pass an empty string ""
@@ -120,6 +120,9 @@ func main() {
 	// Expecting to have 42
 }
 ```
+## Applying functions to data in Cell Stack
+
+TwoStack provides you with convinient interface for applying custom functions to the data stored in Cell Stack. 
 
 ## What is practical application for TwoStack data structure ?
 

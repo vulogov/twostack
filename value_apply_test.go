@@ -1,6 +1,9 @@
 package twostack
 
-import "testing"
+import (
+	"fmt"
+	"testing"
+)
 
 func TestApplyGen(t *testing.T) {
 	ts := Init()
@@ -25,6 +28,19 @@ func TestApplyFun(t *testing.T) {
 	if res != 43.0 {
 		t.Errorf("#1 ts.ApplyFun() had failed: %v", res)
 	}
+}
+
+func TestApplyFunAll(t *testing.T) {
+	ts := Init()
+	ts.Put(1)
+	ts.Put(2)
+	ts.Put(3)
+	_, err := ts.ApplyFunAll(NumericIncrease)
+	if err != nil {
+		t.Errorf("Error: %v", err)
+	}
+	r := ts.String()
+	fmt.Println(r)
 }
 
 func TestApplyFunFail(t *testing.T) {

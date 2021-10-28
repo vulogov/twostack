@@ -27,6 +27,17 @@ func (ts *TwoStack) ApplyFun(f FunFun) (*Elem, error) {
 	return nil, err
 }
 
+func (ts *TwoStack) ApplyFunAll(f FunFun) (*Elem, error) {
+	for i := 0; i < ts.Q().Len(); i++ {
+		_, err := ts.ApplyFun(f)
+		if err != nil {
+			return nil, err
+		}
+		ts.CLeft()
+	}
+	return nil, nil
+}
+
 func (ts *TwoStack) ApplyOp(f OpFun) (*Elem, error) {
 	if ts.Len() < 2 {
 		return nil, fmt.Errorf("Stack is to shallow for executing .ApplyOp")
