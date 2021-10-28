@@ -122,7 +122,32 @@ func main() {
 ```
 ## Applying functions to data in Cell Stack
 
-TwoStack provides you with convinient interface for applying custom functions to the data stored in Cell Stack. 
+TwoStack provides you with convinient interface for applying custom functions to the data stored in Cell Stack. There are three types of functions:
+
+- Generator. This function doesn't require any data to be in stack, but will add single element to the stack.
+- Function. This function takes on element from the stack, perform operation with this element and push result back to stack as single element.
+- Operator. This function takes two elements from stack, perform operations with those two elements and push result as single element back to stack.
+
+### Show me the code
+
+```
+import (
+    "fmt"
+    . "github.com/vulogov/twostack"
+)
+func main() {
+    ts := Init()
+	ts.Put(42)
+	_, err := ts.ApplyFun(NumericIncrease)  // Applying function NumericIncrease to the value on top of the stack. This function will convert numeric values to float and increase value to 1.0 
+	if err != nil {
+		t.Errorf("Error: %v", err)
+	}
+	res, _ := ts.G()
+	// Expecing res to be 43.0
+}
+```
+
+If you want to apply functions to values in Global stack, you can perform .Gzip() operation.
 
 ## What is practical application for TwoStack data structure ?
 
