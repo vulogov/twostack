@@ -34,3 +34,32 @@ func TestApplyFunFail(t *testing.T) {
 		t.Errorf("#2 ts.ApplyFun() had failed")
 	}
 }
+
+func TestApplyOp(t *testing.T) {
+	ts := Init()
+	ts.Put(42)
+	ts.Put(42)
+	_, err := ts.ApplyOp(NumericAdd)
+	if err != nil {
+		t.Errorf("Error: %v", err)
+	}
+	res, _ := ts.G()
+	if res != 84.0 {
+		t.Errorf("#1 ts.ApplyOp() had failed: %v", res)
+	}
+}
+
+func TestApplyOpAll(t *testing.T) {
+	ts := Init()
+	ts.Put(1)
+	ts.Put(2)
+	ts.Put(3)
+	_, err := ts.ApplyOpAll(NumericAdd)
+	if err != nil {
+		t.Errorf("Error: %v", err)
+	}
+	res, _ := ts.G()
+	if res != 6.0 {
+		t.Errorf("#1 ts.ApplyOpAll() had failed: %v", res)
+	}
+}
