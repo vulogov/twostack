@@ -39,8 +39,18 @@ func (ts *TwoStack) Left() {
 	ts.R.Rotate(-1)
 }
 
+func (ts *TwoStack) CLeft() {
+	q := ts.Q()
+	q.Rotate(-1)
+}
+
 func (ts *TwoStack) Right() {
 	ts.R.Rotate(1)
+}
+
+func (ts *TwoStack) CRight() {
+	q := ts.Q()
+	q.Rotate(1)
 }
 
 func (ts *TwoStack) Normal() {

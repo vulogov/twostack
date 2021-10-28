@@ -39,6 +39,21 @@ func FloatToString(e *Elem) string {
 	}
 }
 
+func (e *Elem) Float() float64 {
+	switch e.Type {
+	case Float_t:
+		return e.V.(float64)
+	case Int_t:
+		return float64(e.V.(int64))
+	case String_t:
+		v := FloatFromString(e.V.(string))
+		if v != nil {
+			return v.(float64)
+		}
+	}
+	return math.NaN()
+}
+
 func (ts *TwoStack) SetFloat(v float64, labels ...string) {
 	var name string
 	if len(labels) > 0 {
@@ -79,18 +94,7 @@ func (ts *TwoStack) Float() float64 {
 	if err != nil {
 		return math.NaN()
 	}
-	switch e.Type {
-	case Float_t:
-		return e.V.(float64)
-	case Int_t:
-		return float64(e.V.(int64))
-	case String_t:
-		v := FloatFromString(e.V.(string))
-		if v != nil {
-			return v.(float64)
-		}
-	}
-	return math.NaN()
+	return e.Float()
 }
 
 func (ts *TwoStack) TakeFloat() (float64, error) {

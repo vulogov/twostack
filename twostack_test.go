@@ -57,12 +57,28 @@ func TestLeftRight(t *testing.T) {
 	ts.Left()
 	r, _ := ts.Get()
 	if r != "42" {
-		t.Errorf("#1 ts.Mode() had failed, as got %s", r)
+		t.Errorf("#1 ts.Left() had failed, as got %s", r)
 	}
 	ts.Right()
 	r, _ = ts.Get()
 	if r != "41" {
-		t.Errorf("#2 ts.Mode() had failed, as got %s", r)
+		t.Errorf("#2 ts.Right() had failed, as got %s", r)
+	}
+}
+
+func TestCLeftRight(t *testing.T) {
+	ts := Init()
+	ts.Put(1)
+	ts.Put(2)
+	ts.CLeft()
+	r, _ := ts.G()
+	if r != int64(1) {
+		t.Errorf("#1 ts.CLeft() had failed, as got %s", r)
+	}
+	ts.CRight()
+	r, _ = ts.G()
+	if r != int64(2) {
+		t.Errorf("#2 ts.CRight() had failed, as got %s", r)
 	}
 }
 

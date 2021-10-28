@@ -25,12 +25,14 @@ const (
 	IDK = 99
 )
 
-type OpFun func(e1 *Elem, e2 *Elem) error
-type FunFun func(e1 *Elem) error
+type OpFun func(e1 *Elem, e2 *Elem) (*Elem, error)
+type FunFun func(e1 *Elem) (*Elem, error)
+type GenFun func() (*Elem, error)
 type FromStringFun func(d string) interface{}
 type ToStringFun func(e *Elem) string
-type ApplyOpFun func(e1 *Elem, e2 *Elem, f OpFun) error
-type ApplyFunFun func(e1 *Elem, f FunFun) error
+type ApplyOpFun func(ts *TwoStack, e1 *Elem, e2 *Elem, f OpFun) error
+type ApplyFunFun func(ts *TwoStack, e1 *Elem, f FunFun) error
+type ApplyGenFun func(ts *TwoStack, f GenFun) error
 
 type Elem struct {
 	Type       int
@@ -41,6 +43,7 @@ type Elem struct {
 	ToString   ToStringFun
 	Op         ApplyOpFun
 	F          ApplyFunFun
+	G          ApplyGenFun
 }
 
 func NewElem(name string, t int, val interface{}, labels ...string) *Elem {
@@ -54,6 +57,7 @@ func NewElem(name string, t int, val interface{}, labels ...string) *Elem {
 	e.ToString = NoneToString
 	e.F = GenericFunFun
 	e.Op = GenericOpFun
+	e.G = GenericGenFun
 	return &e
 }
 
@@ -169,10 +173,20 @@ func NoneToString(e *Elem) string {
 	return "None"
 }
 
-func GenericFunFun(e1 *Elem, f FunFun) error {
-	return f(e1)
+func GenericGenFun(ts *TwoStack, f GenFun) error {
+	res, err := f()
+	ts.SetElem(res)
+	return err
 }
 
-func GenericOpFun(e1 *Elem, e2 *Elem, f OpFun) error {
-	return f(e1, e2)
+func GenericFunFun(ts *TwoStack, e1 *Elem, f FunFun) error {
+	res, err := f(e1)
+	ts.SetElem(res)
+	return err
+}
+
+func GenericOpFun(ts *TwoStack, e1 *Elem, e2 *Elem, f OpFun) error {
+	res, err := f(e1, e2)
+	ts.SetElem(res)
+	return err
 }
