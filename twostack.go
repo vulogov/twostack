@@ -17,6 +17,8 @@ type TwoStack struct {
 	Mode   bool
 	IsIF   bool
 	InstF  FunFun
+	IsFF   bool
+	InstFF FilterFun
 }
 
 const minCap = 1024
@@ -31,6 +33,8 @@ func Init() *TwoStack {
 		ID:     uuid.New().String(),
 		IsIF:   false,
 		InstF:  Passthrough,
+		IsFF:   false,
+		InstFF: PassthroughFilter,
 	}
 	ts.R.PushBack(deque.New(0, minCap))
 	if ts.R.Len() != 1 {

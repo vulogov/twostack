@@ -30,6 +30,7 @@ type OpFun func(e1 *Elem, e2 *Elem) (*Elem, error)
 type FunFun func(e1 *Elem) (*Elem, error)
 type GenFun func() (*Elem, error)
 type EvalFun func(kv *cmap.Cmap, p *mapset.Set) (*Elem, error)
+type FilterFun func(e1 *Elem) bool
 type FromStringFun func(d string) interface{}
 type ToStringFun func(e *Elem) string
 type ApplyOpFun func(ts *TwoStack, e1 *Elem, e2 *Elem, f OpFun) error
@@ -160,6 +161,12 @@ func (ts *TwoStack) Put(d interface{}, labels ...string) bool {
 		e = String(name, d.(string), labels...)
 	}
 	if e != nil {
+		if ts.IsFF {
+			r := ts.InstFF(e)
+			if !r {
+				return false
+			}
+		}
 		if ts.IsIF {
 			e1, err := ts.InstF(e)
 			if err != nil {
