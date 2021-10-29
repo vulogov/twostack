@@ -3,6 +3,7 @@ package twostack
 import (
 	mapset "github.com/deckarep/golang-set"
 	"github.com/google/uuid"
+	"github.com/lrita/cmap"
 )
 
 const (
@@ -28,6 +29,7 @@ const (
 type OpFun func(e1 *Elem, e2 *Elem) (*Elem, error)
 type FunFun func(e1 *Elem) (*Elem, error)
 type GenFun func() (*Elem, error)
+type EvalFun func(kv *cmap.Cmap, p *mapset.Set) (*Elem, error)
 type FromStringFun func(d string) interface{}
 type ToStringFun func(e *Elem) string
 type ApplyOpFun func(ts *TwoStack, e1 *Elem, e2 *Elem, f OpFun) error

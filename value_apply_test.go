@@ -79,3 +79,18 @@ func TestApplyOpAll(t *testing.T) {
 		t.Errorf("#1 ts.ApplyOpAll() had failed: %v", res)
 	}
 }
+
+func TestEval(t *testing.T) {
+	ts := Init()
+	ts.Put(42, "answer")
+	ts.Put("hello", "#")
+	ts.MakeCall("answer")
+	_, err := ts.Eval(GiveAnswer)
+	if err != nil {
+		t.Errorf("Error: %v", err)
+	}
+	res, _ := ts.G()
+	if res != int64(42) {
+		t.Errorf("#1 ts.Eval() had failed: %v", res)
+	}
+}

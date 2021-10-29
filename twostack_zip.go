@@ -65,3 +65,23 @@ func gzippost(ts *TwoStack) bool {
 	}
 	return false
 }
+
+func (ts *TwoStack) GMerge() error {
+	if ts.GLen() < 2 {
+		return fmt.Errorf("Global Stack too shallow for .GMerge()")
+	}
+	q1 := ts.Q()
+	ts.Left()
+	for q1.Len() > 0 {
+		if ts.Mode == true {
+			v := q1.PopBack().(*Elem)
+			ts.SetElem(v)
+		} else {
+			v := q1.PopFront().(*Elem)
+			ts.SetElem(v)
+		}
+	}
+	ts.Right()
+	ts.Del()
+	return nil
+}

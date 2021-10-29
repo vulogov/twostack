@@ -1,6 +1,11 @@
 package twostack
 
-import "fmt"
+import (
+	"fmt"
+
+	mapset "github.com/deckarep/golang-set"
+	"github.com/lrita/cmap"
+)
 
 func (ts *TwoStack) ApplyGen(f GenFun) (*Elem, error) {
 	err := GenericGenFun(ts, f)
@@ -66,5 +71,49 @@ func (ts *TwoStack) ApplyOpAll(f OpFun) (*Elem, error) {
 		}
 	}
 	res, _ := ts.GetElem()
+	return res, nil
+}
+
+func (ts *TwoStack) Eval(f EvalFun) (*Elem, error) {
+	p := mapset.NewSet()
+	var kv cmap.Cmap
+
+	q := ts.Q()
+	if q.Len() < 1 {
+		return nil, fmt.Errorf("Cwell stack is too shallow for .Eval()")
+	}
+	if ts.Mode == true {
+		call := q.At(q.Len() - 1).(*Elem)
+		kv.Store("__call__", call)
+		if call.Type != Call_t {
+			return nil, fmt.Errorf("#1 .Eval() expects Call_t element")
+		}
+		for i := 0; i < q.Len(); i++ {
+			v := q.At(i).(*Elem)
+			if v.Name == "#" {
+				p.Add(v)
+			}
+			kv.Store(v.Name, v)
+		}
+	} else {
+		call := q.At(0).(*Elem)
+		kv.Store("__call__", call)
+		if call.Type != Call_t {
+			return nil, fmt.Errorf("#2 .Eval() expects Call_t element")
+		}
+		for i := 1; i < q.Len(); i++ {
+			v := q.At(i).(*Elem)
+			if v.Name == "#" {
+				p.Add(v)
+			}
+			kv.Store(v.Name, v)
+		}
+	}
+	res, err := f(&kv, &p)
+	if err != nil {
+		return nil, err
+	}
+	q.Clear()
+	q.PushBack(res)
 	return res, nil
 }
