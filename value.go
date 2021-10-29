@@ -160,6 +160,14 @@ func (ts *TwoStack) Put(d interface{}, labels ...string) bool {
 		e = String(name, d.(string), labels...)
 	}
 	if e != nil {
+		if ts.IsIF {
+			e1, err := ts.InstF(e)
+			if err != nil {
+				return false
+			}
+			ts.Set(e1)
+			return true
+		}
 		ts.Set(e)
 		return true
 	} else {
