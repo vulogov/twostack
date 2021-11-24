@@ -21,6 +21,8 @@ type NS struct {
 	GFun    cmap.Cmap
 	FFun    cmap.Cmap
 	OFun    cmap.Cmap
+	IFun    cmap.Cmap
+	IFFun   cmap.Cmap
 }
 
 func NewNS(name string) (*NS, error) {
@@ -38,10 +40,11 @@ func NewNS(name string) (*NS, error) {
 
 func (ns *NS) NewNS(name string) (*NS, error) {
 	nns := NS{
-		Name:   name,
-		ID:     uuid.New().String(),
-		TS:     Init(),
-		IsRoot: false,
+		Name:    name,
+		ID:      uuid.New().String(),
+		TS:      Init(),
+		IsRoot:  false,
+		NSstack: *deque.New(0, minCap),
 	}
 	nns.RootNS = ns.RootNS
 	ns.RootNS.NScat.Store(nns.ID, &nns)
@@ -57,6 +60,13 @@ func (ns *NS) NewTempNS() (*NS, error) {
 	nns.Name = nns.ID
 	nns.IsTemp = true
 	return nns, nil
+}
+
+func (ns *NS) Current() (*NS, error) {
+	if ns.RootNS.NSstack.Len() == 0 {
+		return nil, fmt.Errorf("NS stack is empty")
+	}
+	return ns.RootNS.NSstack.Back().(*NS), nil
 }
 
 func (ns *NS) EndNS() error {
